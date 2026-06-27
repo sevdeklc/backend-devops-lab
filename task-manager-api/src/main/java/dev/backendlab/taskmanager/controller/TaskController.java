@@ -2,6 +2,7 @@ package dev.backendlab.taskmanager.controller;
 
 import dev.backendlab.taskmanager.dto.CreateTaskRequest;
 import dev.backendlab.taskmanager.dto.TaskResponse;
+import dev.backendlab.taskmanager.dto.UpdateTaskRequest;
 import dev.backendlab.taskmanager.service.TaskService;
 import org.springframework.web.bind.annotation.PathVariable;
 import jakarta.validation.Valid;
@@ -35,5 +36,19 @@ public class TaskController {
     ) {
         return taskService.createTask(request);
 
+    }
+
+    @PutMapping("/{id}")
+    public TaskResponse updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTaskRequest request
+    ) {
+        return taskService.updateTask(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
     }
 }
