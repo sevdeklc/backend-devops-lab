@@ -4,6 +4,7 @@ import dev.backendlab.taskmanager.dto.CreateTaskRequest;
 import dev.backendlab.taskmanager.dto.TaskResponse;
 import dev.backendlab.taskmanager.dto.UpdateTaskRequest;
 import dev.backendlab.taskmanager.entity.Task;
+import dev.backendlab.taskmanager.exception.TaskNotFoundException;
 import dev.backendlab.taskmanager.mapper.TaskMapper;
 import dev.backendlab.taskmanager.repository.TaskRepository;
 import dev.backendlab.taskmanager.service.TaskService;
@@ -30,7 +31,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse getTaskById(Long id) {
-        return null;
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        return TaskMapper.toResponse(task);
     }
 
     @Override
