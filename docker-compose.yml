@@ -28,6 +28,19 @@ services:
     networks:
       - backend-devops-network
 
+  task-manager-api:
+    build:
+      context: ./task-manager-api
+      dockerfile: Dockerfile
+    container_name: backend-devops-task-manager-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - backend-devops-network
+
 volumes:
   postgres_data:
 
