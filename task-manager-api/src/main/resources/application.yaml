@@ -36,3 +36,9 @@ info:
     name: ${spring.application.name}
     description: Backend DevOps Lab Task Manager REST API
     version: 0.0.1-SNAPSHOT
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

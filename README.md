@@ -44,6 +44,10 @@ A Spring Boot REST API for managing tasks with full CRUD operations, validation,
 ```text
 backend-devops-lab
 ├── .env.example
+├── api-docs/
+│   ├── curl-examples.md
+│   └── postman/
+│       └── task-manager-api.postman_collection.json
 ├── docker-compose.yml
 ├── docker/
 ├── docs/
@@ -66,27 +70,30 @@ backend-devops-lab
 
 * Spring Boot Maven project
 * Layered Architecture
-
-    * Controller
-    * Service
-    * Repository
-    * DTO
-    * Mapper
-    * Entity
+  * Controller
+  * Service
+  * Repository
+  * DTO
+  * Mapper
+  * Entity
 * PostgreSQL integration
 * Dockerfile
 * Docker Compose
 * pgAdmin
 * Environment variable based configuration
-* `.env.example`
+* `.env` and `.env.example`
 * CRUD REST API
 * Bean Validation
 * Global Exception Handling
 * Standard Error Response
 * Spring Boot Actuator
-
-    * `/actuator/health`
-    * `/actuator/info`
+  * `/actuator/health`
+  * `/actuator/info`
+* API Documentation
+  * cURL Examples
+  * Postman Collection
+  * Swagger UI
+  * OpenAPI Specification
 
 ---
 
@@ -197,83 +204,14 @@ http://localhost:8080
 
 ---
 
-## 🧪 Example Requests
+## 🧪 API Documentation
 
-### Create Task
+Detailed API request examples are available in the API documentation directory.
 
-```bash
-curl -X POST http://localhost:8080/tasks \
--H "Content-Type: application/json" \
--d '{
-"title":"Docker Compose öğren",
-"description":"Spring Boot and PostgreSQL are working together."
-}'
-```
-
----
-
-### Get All Tasks
-
-```bash
-curl http://localhost:8080/tasks
-```
-
----
-
-### Get Task By Id
-
-```bash
-curl http://localhost:8080/tasks/1
-```
-
----
-
-### Update Task
-
-```bash
-curl -X PUT http://localhost:8080/tasks/1 \
--H "Content-Type: application/json" \
--d '{
-"title":"Docker Compose Completed",
-"description":"Docker environment is ready.",
-"completed":true
-}'
-```
-
----
-
-### Delete Task
-
-```bash
-curl -X DELETE http://localhost:8080/tasks/1
-```
-
----
-
-## ❌ Validation Example
-
-```bash
-curl -i -X POST http://localhost:8080/tasks \
--H "Content-Type: application/json" \
--d '{
-"title":"",
-"description":"Validation test"
-}'
-```
-
-Example response
-
-```json
-{
-  "timestamp": "...",
-  "status": 400,
-  "error": "Bad Request",
-  "message": "Validation failed",
-  "fieldErrors": {
-    "title": "Title is required"
-  }
-}
-```
+- [cURL Examples](api-docs/curl-examples.md)
+- Postman Collection: `api-docs/postman/task-manager-api.postman_collection.json`
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 
 ---
 
@@ -323,8 +261,8 @@ Current topics:
 * [x] Global Exception Handling
 * [x] Environment Variables
 * [x] Spring Boot Actuator
+* [x] API Documentation / Postman Collection
 * [ ] Docker Compose Improvements
-* [ ] API Documentation / Postman Collection
 * [ ] Jenkins Pipeline
 * [ ] Docker Registry
 * [ ] Kubernetes
