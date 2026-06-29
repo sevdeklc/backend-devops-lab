@@ -262,7 +262,7 @@ Current topics:
 * [x] Environment Variables
 * [x] Spring Boot Actuator
 * [x] API Documentation / Postman Collection
-* [ ] Docker Compose Improvements
+* [x] Docker Compose Improvements
 * [ ] Jenkins Pipeline
 * [ ] Docker Registry
 * [ ] Kubernetes
