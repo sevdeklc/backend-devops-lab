@@ -29,6 +29,13 @@ A Spring Boot REST API for managing tasks with full CRUD operations, validation,
 * Bean Validation
 * Lombok
 * Spring Boot Actuator
+* OpenAPI
+* Swagger UI
+* Scalar API Reference
+* JUnit 5
+* Mockito
+* MockMvc
+* H2 Database
 * Docker
 * Docker Compose
 * pgAdmin
@@ -93,7 +100,13 @@ backend-devops-lab
   * cURL Examples
   * Postman Collection
   * Swagger UI
+  * Scalar API Reference
   * OpenAPI Specification
+* Automated Tests
+  * Service Unit Tests
+  * Controller Tests with MockMvc
+  * Global Exception Handler Tests
+  * Repository Tests with `@DataJpaTest`
 
 ---
 
@@ -211,6 +224,7 @@ Detailed API request examples are available in the API documentation directory.
 - [cURL Examples](api-docs/curl-examples.md)
 - Postman Collection: `api-docs/postman/task-manager-api.postman_collection.json`
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
+- Scalar API Reference: `http://localhost:8080/scalar`
 - OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 
 ---
@@ -262,6 +276,11 @@ Current topics:
 * [x] Environment Variables
 * [x] Spring Boot Actuator
 * [x] API Documentation / Postman Collection
+* [x] Swagger UI
+* [x] Scalar API Reference
+* [x] Unit Tests
+* [x] Controller Tests
+* [x] Repository Tests
 * [x] Docker Compose Improvements
 * [ ] Jenkins Pipeline
 * [ ] Docker Registry
