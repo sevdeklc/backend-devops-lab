@@ -58,6 +58,10 @@ pipeline {
 
                         echo "=== Network inspect ==="
                         docker inspect backend-devops-ci-test --format '{{json .NetworkSettings.Networks}}'
+
+                        echo "=== DNS check ==="
+                        docker exec backend-devops-ci-test getent hosts postgres || true
+                        docker exec backend-devops-ci-test getent hosts backend-devops-postgres || true
                     '''
                 }
             }
