@@ -13,6 +13,30 @@ pipeline {
             }
         }
 
+        stage('Start CI Database') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'ci-db-username', variable: 'CI_DB_USERNAME'),
+                    string(credentialsId: 'ci-db-password', variable: 'CI_DB_PASSWORD')
+                ]) {
+                    sh '''
+                        docker network create backend-devops-ci-network || true
+                        docker rm -f backend-devops-ci-postgres || true
+
+                        docker run -d \
+                          --name backend-devops-ci-postgres \
+                          --network backend-devops-ci-network \
+                          -e POSTGRES_DB=task_manager_db \
+                          -e POSTGRES_USER="$CI_DB_USERNAME" \
+                          -e POSTGRES_PASSWORD="$CI_DB_PASSWORD" \
+                          postgres:16-alpine
+
+                        sleep 10
+                    '''
+                }
+            }
+        }
+
         stage('Test') {
             steps {
                 dir('task-manager-api') {
@@ -49,19 +73,12 @@ pipeline {
 
                         docker run -d \
                           --name backend-devops-ci-test \
-                          --network backend-devops-lab_backend-devops-network \
+                          --network backend-devops-ci-network \
                           -p 8082:8080 \
                           -e SPRING_DATASOURCE_URL="$CI_DB_URL" \
                           -e SPRING_DATASOURCE_USERNAME="$CI_DB_USERNAME" \
                           -e SPRING_DATASOURCE_PASSWORD="$CI_DB_PASSWORD" \
                           backend-devops-task-manager-api:latest
-
-                        echo "=== Network inspect ==="
-                        docker inspect backend-devops-ci-test --format '{{json .NetworkSettings.Networks}}'
-
-                        echo "=== DNS check ==="
-                        docker exec backend-devops-ci-test getent hosts postgres || true
-                        docker exec backend-devops-ci-test getent hosts backend-devops-postgres || true
                     '''
                 }
             }
@@ -70,7 +87,7 @@ pipeline {
         stage('Health Check') {
             steps {
                 sh '''
-                    sleep 15
+                    sleep 20
 
                     echo "=== Container status ==="
                     docker ps -a --filter "name=backend-devops-ci-test"
@@ -87,6 +104,11 @@ pipeline {
 
     post {
         always {
+            sh '''
+                docker rm -f backend-devops-ci-test || true
+                docker rm -f backend-devops-ci-postgres || true
+                docker network rm backend-devops-ci-network || true
+            '''
             cleanWs()
         }
     }
