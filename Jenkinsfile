@@ -24,7 +24,15 @@ pipeline {
         stage('Package') {
             steps {
                 dir('task-manager-api') {
-                    sh './mvnw clean package -DskipTests'
+                    sh './mvnw package -DskipTests'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir('task-manager-api') {
+                    sh 'docker build -t backend-devops-task-manager-api:latest .'
                 }
             }
         }
