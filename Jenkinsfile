@@ -60,14 +60,22 @@ pipeline {
             }
         }
 
-        stage('Health Check') {
-            steps {
-                sh '''
-                    sleep 15
-                    curl --fail http://host.docker.internal:8082/actuator/health
-                '''
-            }
-        }
+stage('Health Check') {
+    steps {
+        sh '''
+            sleep 15
+
+            echo "=== Container status ==="
+            docker ps -a --filter "name=backend-devops-ci-test"
+
+            echo "=== Container logs ==="
+            docker logs backend-devops-ci-test
+
+            echo "=== Health check ==="
+            curl --fail http://host.docker.internal:8082/actuator/health
+        '''
+    }
+}
     }
 
     post {
