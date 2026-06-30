@@ -64,7 +64,7 @@ pipeline {
             steps {
                 sh '''
                     sleep 15
-                    curl --fail http://localhost:8082/actuator/health
+                    curl --fail http://backend-devops-ci-test:8080/actuator/health
                 '''
             }
         }
