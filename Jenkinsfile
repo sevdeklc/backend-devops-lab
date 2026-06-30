@@ -55,32 +55,34 @@ pipeline {
                           -e SPRING_DATASOURCE_USERNAME="$CI_DB_USERNAME" \
                           -e SPRING_DATASOURCE_PASSWORD="$CI_DB_PASSWORD" \
                           backend-devops-task-manager-api:latest
+
+                        echo "=== Network inspect ==="
+                        docker inspect backend-devops-ci-test --format '{{json .NetworkSettings.Networks}}'
                     '''
                 }
             }
         }
 
-stage('Health Check') {
-    steps {
-        sh '''
-            sleep 15
+        stage('Health Check') {
+            steps {
+                sh '''
+                    sleep 15
 
-            echo "=== Container status ==="
-            docker ps -a --filter "name=backend-devops-ci-test"
+                    echo "=== Container status ==="
+                    docker ps -a --filter "name=backend-devops-ci-test"
 
-            echo "=== Container logs ==="
-            docker logs backend-devops-ci-test
+                    echo "=== Container logs ==="
+                    docker logs backend-devops-ci-test
 
-            echo "=== Health check ==="
-            curl --fail http://host.docker.internal:8082/actuator/health
-        '''
-    }
-}
+                    echo "=== Health check ==="
+                    curl --fail http://host.docker.internal:8082/actuator/health
+                '''
+            }
+        }
     }
 
     post {
         always {
-            sh 'docker rm -f backend-devops-ci-test || true'
             cleanWs()
         }
     }
