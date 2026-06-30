@@ -36,10 +36,43 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Container') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'ci-db-url', variable: 'CI_DB_URL'),
+                    string(credentialsId: 'ci-db-username', variable: 'CI_DB_USERNAME'),
+                    string(credentialsId: 'ci-db-password', variable: 'CI_DB_PASSWORD')
+                ]) {
+                    sh '''
+                        docker rm -f backend-devops-ci-test || true
+
+                        docker run -d \
+                          --name backend-devops-ci-test \
+                          --network backend-devops-lab_backend-devops-network \
+                          -p 8082:8080 \
+                          -e SPRING_DATASOURCE_URL="$CI_DB_URL" \
+                          -e SPRING_DATASOURCE_USERNAME="$CI_DB_USERNAME" \
+                          -e SPRING_DATASOURCE_PASSWORD="$CI_DB_PASSWORD" \
+                          backend-devops-task-manager-api:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh '''
+                    sleep 15
+                    curl --fail http://localhost:8082/actuator/health
+                '''
+            }
+        }
     }
 
     post {
         always {
+            sh 'docker rm -f backend-devops-ci-test || true'
             cleanWs()
         }
     }
